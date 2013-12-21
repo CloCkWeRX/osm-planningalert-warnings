@@ -12,9 +12,12 @@ bbox = [
   153.325195 
 ]
 
+osm_api_endpoint = "http://#{user}:#{pass}@api.openstreetmap.org/"
+osm_api_endpoint = "http://#{user}:#{pass}@api06.dev.openstreetmap.org/"
+
 planning_alerts = URI.parse("http://api.planningalerts.org.au/applications.js?bottom_left_lat=#{bbox[0]}&bottom_left_lng=#{bbox[1]}&top_right_lat=#{bbox[2]}&top_right_lng=#{bbox[3]}")
 
-existing_notes = URI.parse("http://api.openstreetmap.org/api/0.6/notes?bbox=#{bbox.join(',')}")
+existing_notes = URI.parse("#{osm_api_endpoint}/api/0.6/notes?bbox=#{bbox.join(',')}")
 
 
 planning_data = JSON.parse(Net::HTTP.get_response(planning_alerts).body)
@@ -40,7 +43,7 @@ planning_data[0..0].each do |item|
       'text'=> note_description.join("\n")
     })
     response = Net::HTTP.post_form(
-      URI("http://#{user}:#{pass}@api.openstreetmap.org/api/0.6/notes?#{params}"), 'q' => {},
+      URI("#{osm_api_endpoint}/api/0.6/notes?#{params}"), 'q' => {},
 
       )
 
